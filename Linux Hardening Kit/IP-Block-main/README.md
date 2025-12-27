@@ -1,0 +1,42 @@
+# IP-Block
+Fetches a list from spamhaus daily and blocks all offending IP's
+
+# Requirements
+
+`apt-get install ipset mailutils jq`
+
+### Create a cron job to update blocklists
+
+`sudo nano /etc/cron.daily/update-blocklists`
+
+Add: `ip-block.sh` contents
+
+`sudo chmod +x /etc/cron.daily/update-blocklists`
+
+### Create log file with proper permissions
+
+`sudo touch /var/log/blocklist-update.log`
+
+`sudo chmod 644 /var/log/blocklist-update.log`
+
+### Test it manually first
+
+`sudo /etc/cron.daily/update-blocklists`
+
+### Check the log
+
+`sudo tail -f /var/log/blocklist-update.log`
+
+# Security status file
+
+Optional monitoring tool.
+
+`nano ~/security-status.sh`
+
+Paste `security-status.sh`
+
+`chmod +x ~/security-status.sh`
+
+Run it:
+
+`./security-status.sh`
