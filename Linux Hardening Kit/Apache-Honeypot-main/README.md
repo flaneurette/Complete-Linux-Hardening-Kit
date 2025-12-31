@@ -10,6 +10,8 @@ When a path, folder or file is entered or accessed (determined by rules in the r
 
 > Usually a scanner searches for multiple files automatically, which triggers all 3 strikes, and the IP is blocked in IP Tables by Fail2ban for a certain amount of time, default: 24hrs.
 
+> The script also tries to determine if the source originated from navigation or document. It logs and stops any IP block that orginates from HTML elements, such as iframes, objects and images to prevent an attacker induced social engineering attempt, that may result in users being blacklisted when they click on a link with a hidden element that may trigger IP blocking.
+
 ### Installation
 
 Step 1: Upload /tmp/ and honeypot-strike.php to your web-root folder, usually /www/ (wait with the .htaccess)
