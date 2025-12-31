@@ -125,3 +125,14 @@ sudo fail2ban-client reload honeypot
 ```
 sudo fail2ban-client status honeypot
 ```
+
+### 8. Clearing
+
+If you need to clean and unban all IPs, perhaps in a large scale attack aimed at social engineering users, you could clear the jail to prevent legitimate users from accessing your service. 
+It would be best to monitor the logs from time to time, especially if many "embed requests" are being made, which indicate a more sophisticated and customized attack to your server. However, this is very rare. We plan, in a future version, to send a single warning e-mail to the admin in such event, so that you could take immediate action and flush the jail temporarily while investigating the cause or source. But for now caution is advised.
+
+To flush the honeypot jail:
+
+`
+sudo fail2ban-client set honeypot unbanip --all
+`
