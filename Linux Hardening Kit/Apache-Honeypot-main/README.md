@@ -8,9 +8,11 @@ When a path, folder or file is entered or accessed (determined by rules in the r
 2. Second time: Warning of impending IP block
 3. Third time: IP Block.
 
-> Usually a scanner searches for multiple files automatically, which triggers all 3 strikes, and the IP is blocked in IP Tables by Fail2ban for a certain amount of time, default: 24hrs.
+> Usually, a scanner probes for multiple known files automatically. This triggers all three strikes, after which the IP is blocked at the firewall level by Fail2ban (iptables) for a configurable duration (default: 24 hours).
 
-> The script also tries to determine if the source originated from navigation or document. It logs and stops any IP block that orginates from HTML elements, such as iframes, objects and images to prevent an attacker induced social engineering attempt, that may result in users being blacklisted when they click on a link with a hidden element that may trigger IP blocking.
+> The script attempts to distinguish intentional, top‑level navigation requests from embedded requests. Any access originating from HTML elements such as iframes, objects, or images is logged but excluded from strike counting. This prevents attacker‑induced or social‑engineering scenarios where a user could be blacklisted simply by visiting a page containing hidden or embedded requests to the honeypot URL.
+
+> This mechanism does not stop a determined attacker who writes a fully custom bot and deliberately mimics browser navigation behavior. Its purpose is to eliminate off‑the‑shelf scanners and automated scripts commonly observed in the wild.
 
 ### Installation
 
