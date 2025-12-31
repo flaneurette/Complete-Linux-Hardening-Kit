@@ -43,6 +43,33 @@ if ($ip === ADMIN_IP || $ip === '127.0.0.1' || $ip === '::1') {
     exit('Not Found');
 }
 
+// Protect against reflected ban / induced ban attack.
+// Detect if request is top-level navigation
+$sec_fetch_dest = $_SERVER['HTTP_SEC_FETCH_DEST'] ?? '';
+$sec_fetch_mode = $_SERVER['HTTP_SEC_FETCH_MODE'] ?? '';
+$sec_fetch_site = $_SERVER['HTTP_SEC_FETCH_SITE'] ?? '';
+$sec_fetch_user = $_SERVER['HTTP_SEC_FETCH_USER'] ?? '';
+
+$is_top_level = ($sec_fetch_dest === 'document' && $sec_fetch_mode === 'navigate');
+
+// Only count strikes for top-level requests
+if (!$is_top_level) {
+    // Optionally log it separately for analysis
+    $log_entry = sprintf(
+        "[%s] IP: %s | Skipped (possible iframe/embed attack) | Path: %s | UA: %s\n",
+        $timestamp,
+        substr($ip, 0, 100),
+        substr($path, 0, 100),
+        substr($user_agent, 0, 100)
+    );
+    @file_put_contents(LOG_FILE, $log_entry, FILE_APPEND);
+
+    // Serve normal 404 silently
+    showSilent($ip, $path, $strikes);
+    exit();
+}
+
+
 // Get strike count
 $strike_file = $unique_folder . '/' . md5($ip) . '.txt';
 $strikes = 0;
