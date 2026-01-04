@@ -12,6 +12,9 @@ define('STRIKE_TIMEOUT', 86400);
 define('STRIKE_DIR', __DIR__ . '/tmp/honeypot-' . htmlspecialchars(UNIQUE_KEY));
 define('LOG_FILE', htmlspecialchars(STRIKE_DIR) . '/' . htmlspecialchars(UNIQUE_KEY).'-honeypot.log');
 
+# Set timezone to prevent fail2ban giving time mismatch errors.
+date_default_timezone_set('UTC');
+
 // Ensure directories exist
 if (!is_dir(STRIKE_DIR)) mkdir(STRIKE_DIR, 0700, true);
 $unique_folder = STRIKE_DIR . '/hp_' . md5(UNIQUE_KEY); 
