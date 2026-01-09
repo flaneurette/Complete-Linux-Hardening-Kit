@@ -32,12 +32,13 @@ jobs:
           mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Server-Scripts/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/"
-      - name: Checkout Server-Scripts
+          
+      - name: Checkout Apache-Honeypot
         uses: actions/checkout@v4
         with:
-          repository: flaneurette/Server-Scripts
+          repository: flaneurette/Apache-Honeypot
           token: ${{ secrets.SSP }}
-          path: Server-Scripts
+          path: Apache-Honeypot
       
       - name: Sync Apache-Honeypot
         run: |
