@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Apache-Honeypot
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Apache-Honeypot
       
       - name: Sync Apache-Honeypot
@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Auto-enable-UFW
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Auto-enable-UFW
       
       - name: Sync Auto-enable-UFW
@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Automated-Server-Backup
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Automated-Server-Backup
       
       - name: Sync Automated-Server-Backup
@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Comprehensive-Fail2ban-Configuration
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Comprehensive-Fail2ban-Configuration
       
       - name: Sync Comprehensive-Fail2ban-Configuration
@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Comprehensive-Linux-Server-Hardening-Guide
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Comprehensive-Linux-Server-Hardening-Guide
       
       - name: Sync Comprehensive-Linux-Server-Hardening-Guide
@@ -77,7 +77,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/IP-Block
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: IP-Block
       
       - name: Sync IP-Block
@@ -89,7 +89,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Linux-Rat-Scan
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Linux-Rat-Scan
       
       - name: Sync Linux-Rat-Scan
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Tailscale-Monitor
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Tailscale-Monitor
       
       - name: Sync Tailscale-Monitor
@@ -113,7 +113,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Verify-USB-Stick
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Verify-USB-Stick
       
       - name: Sync Verify-USB-Stick
@@ -125,7 +125,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/PHP-Traffic-Volumizer
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: PHP-Traffic-Volumizer
       
       - name: Sync PHP-Traffic-Volumizer
@@ -137,7 +137,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Tailscale-Split-Traffic-Setup-for-Web-Server
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Tailscale-Split-Traffic-Setup-for-Web-Server
       
       - name: Sync Tailscale-Split-Traffic-Setup-for-Web-Server
@@ -149,7 +149,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/VPS-Audit
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: VPS-Audit
       
       - name: Sync VPS-Audit
@@ -161,7 +161,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: flaneurette/Hardening-Encryption-on-Linux
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.SSP }}
           path: Hardening-Encryption-on-Linux
       
       - name: Sync Hardening-Encryption-on-Linux
