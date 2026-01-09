@@ -19,13 +19,25 @@ jobs:
           repository: flaneurette/Complete-Linux-Hardening-Kit
           token: ${{ secrets.SSP }}
           path: Complete-Linux-Hardening-Kit
-
-      - name: Checkout Apache-Honeypot
+          
+      - name: Checkout Server-Scripts
         uses: actions/checkout@v4
         with:
-          repository: flaneurette/Apache-Honeypot
+          repository: flaneurette/Server-Scripts
           token: ${{ secrets.SSP }}
-          path: Apache-Honeypot
+          path: Server-Scripts
+      
+      - name: Sync Server-Scripts
+        run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/"
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Server-Scripts/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Server-Scripts/"
+      - name: Checkout Server-Scripts
+        uses: actions/checkout@v4
+        with:
+          repository: flaneurette/Server-Scripts
+          token: ${{ secrets.SSP }}
+          path: Server-Scripts
       
       - name: Sync Apache-Honeypot
         run: |
