@@ -12,6 +12,13 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      # First, checkout the target repository
+      - name: Checkout Complete-Linux-Hardening-Kit
+        uses: actions/checkout@v4
+        with:
+          repository: flaneurette/Complete-Linux-Hardening-Kit
+          token: ${{ secrets.SSP }}
+          path: Complete-Linux-Hardening-Kit
 
       - name: Checkout Apache-Honeypot
         uses: actions/checkout@v4
@@ -22,8 +29,8 @@ jobs:
       
       - name: Sync Apache-Honeypot
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Apache-Honeypot/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/"
 
       - name: Checkout Auto-enable-UFW
         uses: actions/checkout@v4
@@ -34,8 +41,8 @@ jobs:
       
       - name: Sync Auto-enable-UFW
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Auto-enable-UFW/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/"
 
       - name: Checkout Automated-Server-Backup
         uses: actions/checkout@v4
@@ -46,8 +53,8 @@ jobs:
       
       - name: Sync Automated-Server-Backup
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Automated-Server-Backup/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/"
 
       - name: Checkout Comprehensive-Fail2ban-Configuration
         uses: actions/checkout@v4
@@ -58,8 +65,8 @@ jobs:
       
       - name: Sync Comprehensive-Fail2ban-Configuration
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Comprehensive-Fail2ban-Configuration/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/"
 
       - name: Checkout Comprehensive-Linux-Server-Hardening-Guide
         uses: actions/checkout@v4
@@ -70,8 +77,8 @@ jobs:
       
       - name: Sync Comprehensive-Linux-Server-Hardening-Guide
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Comprehensive-Linux-Server-Hardening-Guide/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/"
 
       - name: Checkout IP-Block
         uses: actions/checkout@v4
@@ -82,8 +89,8 @@ jobs:
       
       - name: Sync IP-Block
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' IP-Block/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/"
 
       - name: Checkout Linux-Rat-Scan
         uses: actions/checkout@v4
@@ -94,8 +101,8 @@ jobs:
       
       - name: Sync Linux-Rat-Scan
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Linux-Rat-Scan/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/"
 
       - name: Checkout Tailscale-Monitor
         uses: actions/checkout@v4
@@ -106,8 +113,8 @@ jobs:
       
       - name: Sync Tailscale-Monitor
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Tailscale-Monitor/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/"
 
       - name: Checkout Verify-USB-Stick
         uses: actions/checkout@v4
@@ -118,8 +125,8 @@ jobs:
       
       - name: Sync Verify-USB-Stick
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Verify-USB-Stick/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/"
 
       - name: Checkout PHP-Traffic-Volumizer
         uses: actions/checkout@v4
@@ -130,8 +137,8 @@ jobs:
       
       - name: Sync PHP-Traffic-Volumizer
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' PHP-Traffic-Volumizer/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/"
 
       - name: Checkout Tailscale-Split-Traffic-Setup-for-Web-Server
         uses: actions/checkout@v4
@@ -142,8 +149,8 @@ jobs:
       
       - name: Sync Tailscale-Split-Traffic-Setup-for-Web-Server
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Tailscale-Split-Traffic-Setup-for-Web-Server/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/"
 
       - name: Checkout VPS-Audit
         uses: actions/checkout@v4
@@ -154,8 +161,8 @@ jobs:
       
       - name: Sync VPS-Audit
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' VPS-Audit/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/"
 
       - name: Checkout Hardening-Encryption-on-Linux
         uses: actions/checkout@v4
@@ -166,8 +173,8 @@ jobs:
       
       - name: Sync Hardening-Encryption-on-Linux
         run: |
-          find Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/ -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' another-repo/Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Hardening-Encryption-on-Linux/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/"
 
       - name: Commit and push changes
         run: |
