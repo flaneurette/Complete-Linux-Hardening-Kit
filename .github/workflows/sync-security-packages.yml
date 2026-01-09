@@ -29,6 +29,7 @@ jobs:
       
       - name: Sync Apache-Honeypot
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Apache-Honeypot/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Apache-Honeypot/"
 
@@ -41,6 +42,7 @@ jobs:
       
       - name: Sync Auto-enable-UFW
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Auto-enable-UFW/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Auto-enable-UFW/"
 
@@ -53,6 +55,7 @@ jobs:
       
       - name: Sync Automated-Server-Backup
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Automated-Server-Backup/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Automated-Server-Backup/"
 
@@ -65,6 +68,7 @@ jobs:
       
       - name: Sync Comprehensive-Fail2ban-Configuration
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Comprehensive-Fail2ban-Configuration/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Fail2ban-Configuration/"
 
@@ -77,6 +81,7 @@ jobs:
       
       - name: Sync Comprehensive-Linux-Server-Hardening-Guide
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Comprehensive-Linux-Server-Hardening-Guide/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Comprehensive-Linux-Server-Hardening-Guide/"
 
@@ -89,6 +94,7 @@ jobs:
       
       - name: Sync IP-Block
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' IP-Block/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/IP-Block/"
 
@@ -101,6 +107,7 @@ jobs:
       
       - name: Sync Linux-Rat-Scan
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Linux-Rat-Scan/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Linux-Rat-Scan/"
 
@@ -113,6 +120,7 @@ jobs:
       
       - name: Sync Tailscale-Monitor
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Tailscale-Monitor/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Monitor/"
 
@@ -125,6 +133,7 @@ jobs:
       
       - name: Sync Verify-USB-Stick
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Verify-USB-Stick/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Verify-USB-Stick/"
 
@@ -137,6 +146,7 @@ jobs:
       
       - name: Sync PHP-Traffic-Volumizer
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' PHP-Traffic-Volumizer/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/PHP-Traffic-Volumizer/"
 
@@ -149,6 +159,7 @@ jobs:
       
       - name: Sync Tailscale-Split-Traffic-Setup-for-Web-Server
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Tailscale-Split-Traffic-Setup-for-Web-Server/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Tailscale-Split-Traffic-Setup-for-Web-Server/"
 
@@ -161,6 +172,7 @@ jobs:
       
       - name: Sync VPS-Audit
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' VPS-Audit/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/VPS-Audit/"
 
@@ -173,6 +185,7 @@ jobs:
       
       - name: Sync Hardening-Encryption-on-Linux
         run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Hardening-Encryption-on-Linux/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/"
 
