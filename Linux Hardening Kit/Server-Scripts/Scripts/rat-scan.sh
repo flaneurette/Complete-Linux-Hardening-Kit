@@ -94,3 +94,9 @@ echo "Reports saved to: $REPORT_DIR"
 echo -e "\nSummary of detected issues:"
 grep -H . "$REPORT_DIR"/*_bad.log | grep -v "No suspicious" || \
     echo "No suspicious or infected files detected."
+    
+# --- Cleanup ---
+log "Cleaning up security tools"
+run_cmd sudo apt remove clamav clamav-daemon rkhunter chkrootkit --purge -y
+run_cmd sudo apt autoremove -y
+echo "Security tools removed. RAM freed!"
