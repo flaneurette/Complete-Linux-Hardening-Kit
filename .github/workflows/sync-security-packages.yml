@@ -202,6 +202,19 @@ jobs:
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Hardening-Encryption-on-Linux/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/"
 
+      - name: Checkout Anti-R.U.D.Y.
+        uses: actions/checkout@v4
+        with:
+          repository: flaneurette/Anti-R.U.D.Y.
+          token: ${{ secrets.SSP }}
+          path: Anti-R.U.D.Y.
+      
+      - name: Sync Anti-R.U.D.Y.
+        run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./"
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Anti-R.U.D.Y./ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./"
+
       - name: Commit and push changes
         run: |
           cd Complete-Linux-Hardening-Kit
