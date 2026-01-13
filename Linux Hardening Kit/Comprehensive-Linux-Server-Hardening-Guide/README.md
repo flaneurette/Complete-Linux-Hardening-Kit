@@ -2,6 +2,8 @@
 
 A complete guide to securing and hardening a Linux server with practical commands and configurations.
 
+NOTE: Be sure to **disable IPv6** if you do not use it. See the **IPv6.md** document on how to do this.
+
 ## Table of Contents
 - [Initial Setup](#initial-setup)
 - [System Updates](#system-updates)
@@ -487,7 +489,7 @@ sudo tail -f /var/log/mod_evasive/dos-*.log
 
 ### Kernel Parameter Tuning for DDoS Protection
 ```bash
-sudo nano /etc/sysctl.conf
+sudo nano /etc/sysctl.d/99-harden.conf
 ```
 
 Add:
@@ -537,7 +539,7 @@ net.netfilter.nf_conntrack_max = 1000000
 
 Apply changes:
 ```bash
-sudo sysctl -p
+sudo sysctl --system
 ```
 
 ---
