@@ -1,6 +1,8 @@
 # PHP Traffic Volumizer
 
-Anti Traffic Volume Analysis
+> DISCLAIMER: complete anonymity on the internet, is extremely difficult if not impossible. Especially with ML and AI profilers nowadays. Once connected to the internet, all bets are off. If you do/plan something bad, sooner or later you WILL get caught. If you are an activist, journalist, dissident, whistleblower, please take extreme caution and if possible consult a internet security expert for solid advice on how to stay anonymous in the ML/AI age. Tor is good, but it's not bulletproof. Visit: https://ssd.eff.org for more info.
+
+# Anti Traffic Volume Analysis
 
 > In short: Most websites have a largely fixed total page size, with only minor variations. This means the total number of bytes transferred when loading a page is often predictable. An observer can measure this traffic volume, store it as a fingerprint, and build a database of such fingerprints for many websites. Even when an end‑to‑end connection is fully encrypted, a malicious actor can still observe traffic volume and timing. By comparing this metadata against a large, frequently updated database of known site fingerprints - which can be obtained by continuously crawling large parts of the IPv4 space - the observer can often infer which website a user is visiting in real time. This technique is known as traffic volume analysis (or website fingerprinting). While encryption protects the content of communication, it does not hide metadata such as packet sizes and transfer patterns. There are mitigation techniques, but they typically involve trade‑offs in bandwidth, latency, or usability.
 
@@ -16,6 +18,26 @@ When you visit a website over HTTPS or through a VPN, the data itself is encrypt
 - Identity correlation across different sessions
 
 This is particularly concerning because it bypasses encryption entirely. Your VPN or HTTPS connection protects the content, but the "shape" of your traffic remains exposed.
+
+# Practical example
+
+```
+Client opens: example.com - index.html is 54Kb, and has a computed hash of 69c77deb9761cc44a59463b80208c884
+Client opens: example.com/news/ - index.html is 258Kb, and has a computed hash of c9dceb0897760ed9a2d6930e5f4c0a5a
+Client opens: example.com/news/2/ - index.html is 211Kb, and has a computed hash of 63c66fe5c946e66da3fb0ae398f2d95c
+Client opens: example.com/news/3/ - index.html is 167Kb, and has a computed hash of 1981de5ba1d40c229707540654e158d6
+Client opens: example.com/profile/ - index.html is 65Kb, and has a computed hash of 46e7c6e355b9a9ca4d17a9be9a20c639
+etc.
+
+The more interactions of a client, the better we can predict/guess which site is being visited.
+
+All page sizes combined, results in a unique hash: a2d65e2d7d36e5b4dac127a20a7be956
+
+Advanced traffic analysis simply pre-computes every pattern on a given site by scraping ipv4 space on a daily basis (very simple),
+and generating hashes for each unique URI. It can also precompute total hashlength, or analyze this in real time:
+-> predictable pattern, guess accuracy is very high, higher if the user stays on a website for a long time.
+
+```
 
 ## Risks
 
