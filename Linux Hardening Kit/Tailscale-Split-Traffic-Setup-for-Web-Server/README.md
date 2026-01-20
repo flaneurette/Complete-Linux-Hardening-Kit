@@ -67,6 +67,8 @@ When you configure a device as an exit node:
 
 ### 1. Set up the home server (exit node)
 
+> TIP: Allow SSH access through tailscale:  iptables -A INPUT -i tailscale0 -p tcp --dport 22 -j ACCEPT
+
 ```bash
 # Install Tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
@@ -90,6 +92,8 @@ Important: After running `--advertise-exit-node`, you must approve this in the T
 4. Enable "Use as exit node"
 
 ### 2. Configure the PUBLIC webserver
+
+> TIP: Allow SSH access through tailscale:  iptables -A INPUT -i tailscale0 -p tcp --dport 22 -j ACCEPT
 
 Configure the public webserver (with split tunneling)
 
