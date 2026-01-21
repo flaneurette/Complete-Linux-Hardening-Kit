@@ -34,6 +34,8 @@ sudo mkdir -p /etc/fail2ban/jail.d
 
 Create `/etc/fail2ban/jail.local`:
 
+These are **examples** do not add more than about **12 jails**, or fail2ban might crash. Less is more.
+
 ```ini
 # =============================================================================
 # FAIL2BAN COMPREHENSIVE CONFIGURATION FOR EXAMPLE.COM
@@ -472,6 +474,8 @@ maxretry = 3
 ---
 
 ## Custom Filters
+
+Also make sure each filter exists,  if missing, create one.
 
 ### WordPress Scan Filter
 
