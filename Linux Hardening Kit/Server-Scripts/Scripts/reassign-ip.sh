@@ -24,7 +24,7 @@ OLD_IP="100.2.3.4"
 NEW_IP="101.2.6.7"
 
 # Ports the NEW IP is allowed to connect to:
-PORTS_TCP=(22 80 443 143 465 587 993 8080 8443)
+PORTS_TCP=(22 80 443 143 465 587 993 995 8080 8443)
 PORTS_UDP=(8080 8443)
 
 # Install netfilter-persistent (removes UFW!)
