@@ -1,0 +1,263 @@
+
+# ============================================================================================================
+# FAIL2BAN EXAMPLE WITH 11 ACTIVE JAILS. BE SURE THAT THE JAIL FILTER .CONF EXIST! (in /etc/fail2ban/filter.d)
+# BE SURE TO CHANGE IT, LIKE:
+#           YOUR IP
+#           SERVER IP
+# destemail = info@example.com
+# ============================================================================================================
+# This configuration provides multi-layered protection with progressive banning
+
+[DEFAULT]
+# Ban hosts for 10+ days
+bantime = 886400
+
+# A host is banned if it has generated "maxretry" during the last "findtime"
+findtime = 3600
+
+# Number of failures before a host gets banned
+maxretry = 3
+
+# Progressive ban time for repeat offenders
+bantime.increment = true
+bantime.rndtime = 300
+bantime.maxtime = 5w
+bantime.factor = 2
+bantime.formula = ban.Time * (1<<(ban.Count if ban.Count<20 else 20)) * banFactor
+
+# Destination email for alerts (change to your email)
+destemail = info@example.com
+sender = fail2ban@example.com
+sendername = Fail2Ban
+
+# Email action - choose one:
+# action_mw = ban & send email with whois report
+# action_mwl = ban & send email with whois report and relevant log lines
+# action_ = just ban
+action = %(action_mw)s
+
+# Ignore local networks (adjust to your needs)
+ignoreip = 127.0.0.1/8 ::1
+           YOUR IP
+           SERVER IP
+
+# Backend - auto or systemd for better performance
+backend = systemd
+
+# =============================================================================
+# SSH PROTECTION
+# =============================================================================
+
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime =886400
+findtime = 600
+
+# =============================================================================
+# APACHE/WEB SERVER PROTECTION
+# =============================================================================
+
+[apache-auth]
+enabled = true
+port = http,https
+filter = apache-auth
+logpath = /var/log/apache2/*error.log
+maxretry = 3
+bantime = 36000
+
+[apache-noscript]
+enabled = false
+port = http,https
+filter = apache-noscript
+logpath = /var/log/apache2/*access.log
+maxretry = 3
+bantime = 43200
+
+[apache-overflows]
+enabled = true
+port = http,https
+filter = apache-overflows
+logpath = /var/log/apache2/*error.log
+maxretry = 2
+bantime =886400
+
+[apache-nohome]
+enabled = true
+port = http,https
+filter = apache-nohome
+logpath = /var/log/apache2/*error.log
+maxretry = 2
+bantime =886400
+
+[apache-botsearch]
+enabled = false
+port = http,https
+filter = apache-botsearch
+logpath = /var/log/apache2/*access.log
+maxretry = 2
+bantime =886400
+
+[apache-fakegooglebot]
+enabled = false
+port = http,https
+filter = apache-fakegooglebot
+logpath = /var/log/apache2/*access.log
+maxretry = 1
+bantime = 8604800
+ignorecommand = /etc/fail2ban/filter.d/ignorecommands/apache-fakegooglebot <ip>
+
+[apache-modsecurity]
+enabled = false
+port = http,https
+filter = apache-modsecurity
+logpath = /var/log/apache2/modsec_audit.log
+maxretry = 2
+bantime =886400
+
+[apache-shellshock]
+enabled = true
+port = http,https
+filter = apache-shellshock
+logpath = /var/log/apache2/*access.log
+maxretry = 1
+bantime = 8604800
+
+# =============================================================================
+# WEB APPLICATION ATTACKS
+# =============================================================================
+
+# Generic PHP exploits
+[php-url-fopen]
+enabled = true
+port = http,https
+filter = php-url-fopen
+logpath = /var/log/apache2/*access.log
+          /var/log/nginx/access.log
+maxretry = 1
+bantime = 8604800
+
+# Protect against git/env file exposure attempts
+[apache-git]
+enabled = false
+port = http,https
+filter = apache-git
+logpath = /var/log/apache2/*access.log
+          /var/log/nginx/access.log
+maxretry = 1
+bantime = 8604800
+
+[apache-env]
+enabled = false
+port = http,https
+filter = apache-env
+logpath = /var/log/apache2/*access.log
+          /var/log/nginx/access.log
+maxretry = 1
+bantime = 8604800
+
+# =============================================================================
+# MAIL SERVER PROTECTION
+# =============================================================================
+
+[postfix]
+enabled = true
+port = smtp,465,submission
+filter = postfix
+logpath = /var/log/mail.log
+maxretry = 3
+bantime = 36000
+
+[dovecot]
+enabled = true
+port = pop3,pop3s,imap,imaps,submission,465,sieve
+filter = dovecot
+logpath = /var/log/mail.log
+maxretry = 3
+bantime =886400
+
+[sieve]
+enabled = true
+port = smtp,465,submission
+filter = sieve
+logpath = /var/log/mail.log
+maxretry = 3
+bantime = 43200
+
+# =============================================================================
+# FTP SERVER PROTECTION
+# =============================================================================
+
+[vsftpd]
+enabled = false
+port = ftp,ftp-data,ftps,ftps-data
+filter = vsftpd
+logpath = /var/log/vsftpd.log
+maxretry = 3
+
+[proftpd]
+enabled = false
+port = ftp,ftp-data,ftps,ftps-data
+filter = proftpd
+logpath = /var/log/proftpd/proftpd.log
+maxretry = 3
+
+# =============================================================================
+# DATABASE PROTECTION
+# =============================================================================
+
+[mysqld-auth]
+enabled = true
+port = 3306
+filter = mysqld-auth
+logpath = /var/log/mysql/error.log
+maxretry = 3
+
+[mongodb-auth]
+enabled = false
+port = 27017
+filter = mongodb-auth
+logpath = /var/log/mongodb/mongodb.log
+maxretry = 3
+
+# =============================================================================
+# CUSTOM HONEYPOT PROTECTION
+# =============================================================================
+
+[honeypot]
+enabled = false
+port = http,https
+filter = honeypot
+logpath = /var/log/honeypot.log
+maxretry = 1
+bantime = 8604800
+findtime = 3600
+
+# =============================================================================
+# UFW/IPTABLES PROTECTION
+# =============================================================================
+
+[ufw-block]
+enabled = true
+filter = ufw-block
+logpath = /var/log/ufw.log
+maxretry = 5
+bantime =886400
+findtime = 300
+
+# =============================================================================
+# RECIDIVE - Ban persistent offenders across all jails
+# =============================================================================
+
+[recidive]
+enabled = true
+filter = recidive
+logpath = /var/log/fail2ban.log
+action = %(action_mwl)s
+protocol = all
+bantime = 10w
+findtime = 1d
+maxretry = 3
