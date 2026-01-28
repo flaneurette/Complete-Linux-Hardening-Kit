@@ -42,7 +42,7 @@ Using Kleopatra to create a keypair for encryption (GUI)
 
 ```
 Open Kleopatra (installed with Gpg4win).
-Go to File → New Certificate.
+Go to File -> New Certificate.
 Select Create a personal OpenPGP key pair and click Next.
 Enter your name and email (this identifies the key).
 Optional: add a comment (e.g., “Server Backup Key”).
@@ -136,7 +136,7 @@ To run it, click `Run-Backup.vbs`
 Scheduled (Recommended)
 Use Windows Task Scheduler:
 
-Action → Start a program:
+Action -> Start a program:
 ```
 C:\Users\<USERNAME>\Desktop\Backup\Run-Backup.vbs
 ```
