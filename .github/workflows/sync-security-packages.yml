@@ -202,18 +202,18 @@ jobs:
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Hardening-Encryption-on-Linux/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Hardening-Encryption-on-Linux/"
 
-      - name: Checkout Anti-R.U.D.Y.
+      - name: Checkout Anti-RUDY
         uses: actions/checkout@v4
         with:
-          repository: flaneurette/Anti-R.U.D.Y.
+          repository: flaneurette/Anti-RUDY
           token: ${{ secrets.SSP }}
-          path: Anti-R.U.D.Y.
+          path: Anti-RUDY
       
-      - name: Sync Anti-R.U.D.Y.
+      - name: Sync Anti-RUDY
         run: |
-          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./"
-          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-          rsync -av --exclude='.git' --exclude='.github' Anti-R.U.D.Y./ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-R.U.D.Y./"
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/"
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Anti-RUDY/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/"
 
       - name: Commit and push changes
         run: |
