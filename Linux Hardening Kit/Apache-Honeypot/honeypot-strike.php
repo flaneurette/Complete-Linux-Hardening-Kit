@@ -21,6 +21,14 @@ $unique_folder = STRIKE_DIR . '/hp_' . md5(UNIQUE_KEY);
 if (!is_dir($unique_folder)) mkdir($unique_folder, 0700, true);
 if (!is_dir(TEMPLATE_DIR)) mkdir(TEMPLATE_DIR, 0755, true);
 
+// Fix: Prevent logs from piling up (Not good for SSD)
+$txt_files = glob($unique_folder . '/*.txt');
+if (count($txt_files) > 100) {
+    foreach ($txt_files as $file) {
+        unlink($file); // delete the file
+    }
+}
+
 // Get client info
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $ip = htmlspecialchars($ip,ENT_QUOTES,'UTF-8');

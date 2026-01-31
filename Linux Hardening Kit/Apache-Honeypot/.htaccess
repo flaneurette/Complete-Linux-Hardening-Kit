@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /
+# Fix: Rewrite base will not always work...
+# RewriteBase /
 
 # ============= HONEYPOT PATTERNS =============
 # Only try to detect what you do NOT use!

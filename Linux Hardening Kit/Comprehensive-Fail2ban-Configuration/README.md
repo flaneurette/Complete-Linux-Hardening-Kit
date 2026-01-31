@@ -36,6 +36,8 @@ Create `/etc/fail2ban/jail.local`:
 
 These are **examples** do not add more than about **12 jails**, or fail2ban might crash. Less is more.
 
+NOTE: The config below **assumes** each jail config exists in `/etc/fail2ban/filter.d/`. Be sure to manually check if each filter does exists in that folder, otherwise, remove it or create the filter. Do not simply copy paste the example below. The example only gives examples of what you could do.
+
 ```ini
 # =============================================================================
 # FAIL2BAN COMPREHENSIVE CONFIGURATION FOR EXAMPLE.COM
@@ -75,7 +77,7 @@ ignoreip = 127.0.0.1/8 ::1
            YOUR.IP.ADDRESS
 
 # Backend - auto or systemd for better performance
-backend = systemd
+backend = polling
 
 # =============================================================================
 # SSH PROTECTION

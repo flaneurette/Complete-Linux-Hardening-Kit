@@ -5,7 +5,7 @@
 # To find the chain name: sudo iptables -L -n -v --line-numbers
 # To find IP: sudo iptables -L -n -v --line-numbers | grep 100.2.3.4
 # Notice: this script removes UFW.
-# Notice: line prevents script from running suddenly. You MUST manually remove/uncomment this line:
+# Notice: line prevents script from running suddenly. You MUST manually remove/comment this line:
 exit 1
 
 # Root check.

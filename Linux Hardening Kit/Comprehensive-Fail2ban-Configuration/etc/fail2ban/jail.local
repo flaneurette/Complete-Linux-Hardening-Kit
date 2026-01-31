@@ -1,10 +1,10 @@
 
 # ============================================================================================================
-# FAIL2BAN EXAMPLE WITH 11 ACTIVE JAILS. BE SURE THAT THE JAIL FILTER .CONF EXIST! (in /etc/fail2ban/filter.d)
-# BE SURE TO CHANGE IT, LIKE:
+# FAIL2BAN EXAMPLE WITH 11 ACTIVE JAILS. BE SURE THAT EACH JAIL FILTER .CONF EXIST! (in /etc/fail2ban/filter.d)
+# BE SURE CHANGE IP'S:
 #           YOUR IP
 #           SERVER IP
-# destemail = info@example.com
+# AND: destemail = info@example.com
 # ============================================================================================================
 # This configuration provides multi-layered protection with progressive banning
 
@@ -42,7 +42,7 @@ ignoreip = 127.0.0.1/8 ::1
            SERVER IP
 
 # Backend - auto or systemd for better performance
-backend = systemd
+backend = polling
 
 # =============================================================================
 # SSH PROTECTION
@@ -222,19 +222,6 @@ port = 27017
 filter = mongodb-auth
 logpath = /var/log/mongodb/mongodb.log
 maxretry = 3
-
-# =============================================================================
-# CUSTOM HONEYPOT PROTECTION
-# =============================================================================
-
-[honeypot]
-enabled = false
-port = http,https
-filter = honeypot
-logpath = /var/log/honeypot.log
-maxretry = 1
-bantime = 8604800
-findtime = 3600
 
 # =============================================================================
 # UFW/IPTABLES PROTECTION
