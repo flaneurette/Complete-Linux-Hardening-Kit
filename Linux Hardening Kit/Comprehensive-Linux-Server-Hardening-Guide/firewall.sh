@@ -47,7 +47,6 @@ done
 
 # Save rules
 iptables-save > /etc/iptables/rules.v4
-# netfilter-persistent save
 
 # ANSI color codes
 RED='\033[0;31m'

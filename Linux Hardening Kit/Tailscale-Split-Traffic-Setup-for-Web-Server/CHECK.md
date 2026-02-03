@@ -220,7 +220,6 @@ Without NAT, exit node traffic may not work.
 
 ```bash
 iptables-save > /etc/iptables/rules.v4
-netfilter-persistent save
 ```
 
 
