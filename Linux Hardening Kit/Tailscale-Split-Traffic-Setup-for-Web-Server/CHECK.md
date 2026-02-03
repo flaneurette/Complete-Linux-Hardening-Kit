@@ -110,7 +110,7 @@ Depending on your distro:
 ### Debian / Ubuntu
 
 ```bash
-iptables-save > /etc/iptables/rules.v4
+sudo iptables-save > /etc/iptables/rules.v4
 ```
 
 ### Or manually on reboot

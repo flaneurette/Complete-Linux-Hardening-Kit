@@ -160,6 +160,7 @@ CURRENT_STEP="5/11: Installing iptables-persistent"
 echo "[$CURRENT_STEP]"
 export DEBIAN_FRONTEND=noninteractive
 wait_for_apt
+sudo iptables-save > /etc/iptables/rules.v4
 
 # -----------------------------
 # 6. Restore previous firewall rules

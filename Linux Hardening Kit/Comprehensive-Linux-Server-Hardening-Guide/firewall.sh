@@ -11,8 +11,6 @@ PORTS=(22 993 587 995)
 # Allowed Public ports
 PUBLIC_PORTS=(80 443 25)
 
-apt remove -y ufw
-
 sleep 3
 
 # Flush existing rules
