@@ -1,5 +1,15 @@
 # Persistent Linux Firewall
 
+In this document we are going to build a triple-layered defense:
+
+- a persistent firewall(initial boot)
+- a systemd service (post-service restore)
+- a cron canary (continuous monitoring every 5 min)
+
+In this way, we do not have to rely on packages such as `UFW`, `netfilter-persistent` nor `nftables`. Our method is rather safe, because there are few surprises (no strange flushing of tables). Even if you are locked out, a `crontab` will restore the tables properly.
+
+### Why?
+
 Some services, like Tailscale and fail2ban, can flush or overwrite iptables rules on startup or reinstallment which leads to empy iptables. Quite risky! On our system, 
 Tailscale clears iptables during its initialization before it reads its own `nf=off` preference - there is no way to prevent this.
 
@@ -11,15 +21,32 @@ The solution is a custom systemd program that runs after boot, and makes sure th
 
 `iptables-restore-onboot` restores them again.
 
-However, sometimes `netfilter-persistent` doesn't always work properly especially with nft tables (not recommended).
+However, sometimes `netfilter-persistent save` doesn't always work properly especially with `nftables` (not recommended), and might flush your tables!
+
+### Proceed
 
 ```
-# Flush nftables
-sudo nft flush ruleset
-
 # Disable it
 sudo systemctl stop nftables
 sudo systemctl disable nftables
+
+# Switch to REAL iptables (not the nftables wrapper)
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
+# Flush nftables completely
+sudo nft flush ruleset
+
+# Reload your iptables rules
+sudo iptables-restore < /etc/iptables/rules.v4
+
+iptables --version
+# Should say "legacy" now
+
+# Disables netfilter-persistent, which can flush your iptables!
+sudo systemctl disable netfilter-persistent
+sudo systemctl mask netfilter-persistent
+sudo apt remove netfilter-persistent iptables-persistent
 ```
 
 And start using regular `iptables` again.
@@ -46,9 +73,6 @@ Use It:
 ```
 # When you change rules, save with:
 sudo firewall
-
-# NOT this (broken):
-
 ```
 
 ## Saving rules
@@ -88,7 +112,14 @@ done
 # Restore regardless of whether tailscaled started or not
 iptables-restore < /etc/iptables/rules.v4
 ip6tables-restore < /etc/iptables/rules.v6
+
+# Check if fail2ban is running and restart it to recreate its chains
+if systemctl is-active --quiet fail2ban; then
+   systemctl restart fail2ban
+fi
 ```
+
+> NOTE: $(seq 1 60); = 5 minutes. Shorter: 15 instead of 60. = 90 seconds. Still, tailscale can be very slow. 5 minutes is safety.
 
 `chmod +x /usr/local/sbin/iptables-restore-onboot.sh`
 
@@ -99,12 +130,13 @@ ip6tables-restore < /etc/iptables/rules.v6
 ```ini
 [Unit]
 Description=Restore iptables rules after boot
-After=network.target
+After=network-online.target tailscaled.service
+Wants=network-online.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/local/sbin/iptables-restore-onboot.sh
-TimeoutStartSec=45
+TimeoutStartSec=60
 RemainAfterExit=yes
 
 [Install]
@@ -173,6 +205,11 @@ if [ $restore_needed -eq 1 ]; then
     
     echo "$(date): Rules restored successfully" >> "$LOG"
 fi
+
+# Check if fail2ban is running and restart it to recreate its chains
+if systemctl is-active --quiet fail2ban; then
+   systemctl restart fail2ban
+fi
 ```
 
 Then:
@@ -188,3 +225,7 @@ Then add:
 `*/5 * * * * /usr/local/sbin/check-iptables.sh`
 
 ---
+
+Additional useful IP reassignment script:
+
+https://github.com/flaneurette/Server-Scripts/blob/main/Scripts/reassign-ip.sh
