@@ -110,9 +110,7 @@ Depending on your distro:
 ### Debian / Ubuntu
 
 ```bash
-apt install iptables-persistent
 iptables-save > /etc/iptables/rules.v4
-netfilter-persistent save
 ```
 
 ### Or manually on reboot

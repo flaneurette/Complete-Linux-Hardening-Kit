@@ -11,10 +11,7 @@ PORTS=(22 993 587 995)
 # Allowed Public ports
 PUBLIC_PORTS=(80 443 25)
 
-# Install netfilter-persistent if not installed
-
 apt remove -y ufw
-apt install -y netfilter-persistent
 
 sleep 3
 
@@ -50,7 +47,7 @@ done
 
 # Save rules
 iptables-save > /etc/iptables/rules.v4
-netfilter-persistent save
+# netfilter-persistent save
 
 # ANSI color codes
 RED='\033[0;31m'
