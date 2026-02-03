@@ -37,9 +37,7 @@ sudo iptables -A INPUT -i tailscale0 -p tcp --dport 22 -j ACCEPT
 # If you have mailserver:
 sudo iptables -A INPUT  -p tcp --dport 25 -j ACCEPT
 
-# Install netfilter-persistent (removes UFW!)
-# sudo apt update
-sudo apt install netfilter-persistent
+sudo iptables-save > /etc/iptables/rules.v4
 
 # Delete old rules
 for p in "${PORTS_TCP[@]}"; do
@@ -73,7 +71,7 @@ for p in "${PORTS_UDP[@]}"; do
   sudo iptables -A INPUT -p udp --dport $p -j DROP
 done
 
-sudo netfilter-persistent save
+
 
 iptables-save > /etc/iptables/rules.v4
 
