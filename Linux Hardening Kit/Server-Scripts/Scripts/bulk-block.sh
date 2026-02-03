@@ -66,7 +66,13 @@ for subnet in "${SUBNETS[@]}"; do
     fi
 done
 
-sudo iptables-save > /etc/iptables/rules.v4
+# --- Save rules persistently ---
+if command -v netfilter-persistent >/dev/null 2>&1; then
+    netfilter-persistent save
+    echo "Saved iptables rules persistently"
+else
+    echo "Install netfilter-persistent to save rules across reboots"
+fi
 
 # --- Summary ---
 echo "Done! Current block count:"

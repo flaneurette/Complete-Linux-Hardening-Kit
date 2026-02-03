@@ -110,7 +110,7 @@ Depending on your distro:
 ### Debian / Ubuntu
 
 ```bash
-iptables-save > /etc/iptables/rules.v4
+sudo iptables-save > /etc/iptables/rules.v4
 ```
 
 ### Or manually on reboot
@@ -220,7 +220,6 @@ Without NAT, exit node traffic may not work.
 
 ```bash
 iptables-save > /etc/iptables/rules.v4
-netfilter-persistent save
 ```
 
 
