@@ -214,6 +214,19 @@ jobs:
           mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/"
           find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           rsync -av --exclude='.git' --exclude='.github' Anti-RUDY/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Anti-RUDY/"
+    
+      - name: Checkout Persistent-Firewall
+        uses: actions/checkout@v4
+        with:
+          repository: flaneurette/Persistent-Firewall
+          token: ${{ secrets.SSP }}
+          path: Persistent-Firewall
+      
+      - name: Sync Persistent-Firewall
+        run: |
+          mkdir -p "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Persistent-Firewall/"
+          find "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Persistent-Firewall/" -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          rsync -av --exclude='.git' --exclude='.github' Persistent-Firewall/ "Complete-Linux-Hardening-Kit/Linux Hardening Kit/Persistent-Firewall/"
 
       - name: Commit and push changes
         run: |
