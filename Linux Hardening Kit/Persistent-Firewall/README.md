@@ -11,17 +11,53 @@ The solution is a custom systemd program that runs after boot, and makes sure th
 
 `iptables-restore-onboot` restores them again.
 
-However, sometimes `netfilter-persistent` doesn't always work properly.
+However, sometimes `netfilter-persistent` doesn't always work properly especially with nft tables (not recommended).
+
+```
+# Flush nftables
+sudo nft flush ruleset
+
+# Disable it
+sudo systemctl stop nftables
+sudo systemctl disable nftables
+```
+
+And start using regular `iptables` again.
+
+Create:
+
+`sudo nano /usr/local/bin/firewall`
+
+Paste:
+
+```
+#!/bin/bash
+iptables-save > /etc/iptables/rules.v4
+ip6tables-save > /etc/iptables/rules.v6
+echo "Rules saved!"
+```
+
+Then:
+
+`sudo chmod +x /usr/local/bin/firewall`
+
+Use It:
+
+```
+# When you change rules, save with:
+sudo firewall
+
+# NOT this (broken):
+# sudo netfilter-persistent save
+```
 
 ## Saving rules
 
 Whenever you change your iptables rules, save them:
 
-```
-sudo netfilter-persistent save
-```
+`sudo firewall`
 
-Then to be absolutely certain:
+or:
 
 ```bash
 sudo iptables-save > /etc/iptables/rules.v4
@@ -105,7 +141,6 @@ The above adds a “dummy rule” as a canary to check whether your iptables hav
 > Note: 203.0.113.0/24 and 2001:db8::/32 are TEST-NET ranges - they're reserved and will never be routed on the internet, so they're perfect for canaries.
 
 ```
-sudo netfilter-persistent save
 sudo iptables-save > /etc/iptables/rules.v4
 sudo ip6tables-save > /etc/iptables/rules.v6
 ```
