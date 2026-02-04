@@ -81,9 +81,15 @@ Paste:
 
 ```
 #!/bin/bash
+set -e
+
+iptables-save > /etc/iptables/rules.v4.bak.firewall
+ip6tables-save > /etc/iptables/rules.v6.bak.firewall
+
 iptables-save > /etc/iptables/rules.v4
 ip6tables-save > /etc/iptables/rules.v6
-echo "Rules saved!"
+
+echo "Saved all iptables!"
 ```
 
 Then:
@@ -232,16 +238,17 @@ if [ $restore_needed -eq 1 ]; then
     [ -f /etc/iptables/rules.v6 ] && ip6tables-restore < /etc/iptables/rules.v6
     
     echo "$(date): Rules restored successfully" >> "$LOG"
+	
+	# Check if fail2ban is running and restart it to recreate its chains
+	if systemctl is-active --quiet fail2ban; then
+	   systemctl restart fail2ban
+	   if ! iptables -C INPUT -s 203.0.113.99 -m comment --comment "CANARY-ADMIN" -j DROP &>/dev/null; then
+		   echo "$(date): Fail2ban flushed the iptables?!" >> "$LOG"
+		   mail -s "Fail2ban flushed the iptables?!" -r "$FROM" "$EMAIL"
+	   fi
+	fi
 fi
 
-# Check if fail2ban is running and restart it to recreate its chains
-if systemctl is-active --quiet fail2ban; then
-   systemctl restart fail2ban
-   if ! iptables -C INPUT -s 203.0.113.99 -m comment --comment "CANARY-ADMIN" -j DROP &>/dev/null; then
-	   echo "$(date): Fail2ban flushed the iptables?!" >> "$LOG"
-	   mail -s "Fail2ban flushed the iptables?!" -r "$FROM" "$EMAIL"
-   fi
-fi
 ```
 
 Then:
