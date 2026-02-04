@@ -128,8 +128,8 @@ Paste:
 
 ```bash
 #!/bin/bash
-# Wait for tailscaled to start, timeout after 5 minutes
-for i in $(seq 1 60); do
+# Wait for tailscaled to start, timeout after 75 seconds
+for i in $(seq 1 15); do
     if systemctl is-active --quiet tailscaled; then
         sleep 5  # Give it a moment to finish flushing
         break
@@ -147,7 +147,7 @@ if systemctl is-active --quiet fail2ban; then
 fi
 ```
 
-> NOTE: $(seq 1 60); = 5 minutes. Shorter: 15 instead of 60. = 90 seconds. Still, tailscale can be very slow. 5 minutes is safety.
+> NOTE: $(seq 1 60); = 5 minutes. Shorter: 15 instead of 60. ~= 75 seconds. Still, tailscale can be very slow. 5 minutes is extra safety.
 
 `chmod +x /usr/local/sbin/iptables-restore-onboot.sh`
 
@@ -164,7 +164,7 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 ExecStart=/usr/local/sbin/iptables-restore-onboot.sh
-TimeoutStartSec=60
+TimeoutStartSec=120
 RemainAfterExit=yes
 
 [Install]
@@ -173,7 +173,7 @@ WantedBy=multi-user.target
 
 The `After=network-online.target tailscaled.service` is what guarantees this runs last.
 
-Drawback is, it might wait for 30-60 seconds for full reboot. You might have to tweak the TimeoutStartSec, to see whether tailscale boots fast or not. Tailscale can be slow to boot. So 60 seconds is safe.
+Drawback is, it might wait for 30-60 seconds for full reboot. You might have to tweak the TimeoutStartSec, to see whether tailscale boots fast or not. Tailscale can be slow to boot. So 60-120 seconds is safe.
 
 ## Enable it
 
