@@ -6,27 +6,49 @@ In this document we are going to build a triple-layered defense:
 - a systemd service (post-service restore)
 - a cron canary (continuous monitoring every 5 min)
 
-In this way, we do not have to rely on packages such as `UFW`, `netfilter-persistent` nor `nftables`. Our method is rather safe, because there are few surprises (no strange flushing of tables). Even if you are locked out, a `crontab` will restore the tables properly.
+In this way, we do not have to rely on packages such as `UFW`, `netfilter-persistent` nor `nftables`. Our method is rather safe, because there are few surprises (no mysterious flushing of tables). Even if you are locked out, a `crontab` will restore the tables properly.
 
 ### Why?
 
-Some services, like Tailscale and fail2ban, can flush or overwrite iptables rules on startup or reinstallment which leads to empy iptables. Quite risky! On our system, 
+Some services, like netfilter, tailscale, fail2ban and perhaps others, can flush or overwrite iptables rules on startup, reinstallment or reconfiguration which leads to empy iptables. Quite risky! On our system, 
 Tailscale clears iptables during its initialization before it reads its own `nf=off` preference - there is no way to prevent this.
 
 The solution is a custom systemd program that runs after boot, and makes sure that the iptables rules are restored, regardless of the programs running before it.
 
-`netfilter-persistent` restores rules -> 
+- No blind trust in init systems
 
-`tailscaled` starts and flushes them -> 
+- No faith-based persistence
 
-`iptables-restore-onboot` restores them again.
+- Recovery > prevention
 
-However, sometimes `netfilter-persistent save` doesn't always work properly especially with `nftables` (not recommended), and might flush your tables!
-
-### Proceed
+- No mysterious flushes
 
 ```
-# Disable it
+new boot order
+ ├─ netfilter-persistent (ignored, as it might flush if nftables > iptables)
+ ├─ tailscaled (can flush)
+ ├─ fail2ban (can flush)
+ ├─ iptables-restore-onboot.service (restores)
+ └─ cron canary (keeps healing)
+```
+
+However, sometimes `netfilter-persistent save` doesn't always work properly especially with `nftables` (not recommended), and might flush your tables!  (because mixed nft/legacy setups can silently flush or desync rulesets and often it is not clear which wrapper runs on netfilter!)
+
+A lot of things can and will go wrong. So we designed the following `firewall inplementation` like how `HA systems` think:
+
+- assume mutation
+
+- detect drift
+
+- reconcile continuously
+
+### Proceed with implementation
+
+```
+
+sudo apt install mailutils
+
+# Disable nftables
 sudo systemctl stop nftables
 sudo systemctl disable nftables
 
@@ -143,7 +165,7 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 ```
 
-The `After=network.target` is what guarantees this runs last.
+The `After=network-online.target tailscaled.service` is what guarantees this runs last.
 
 Drawback is, it might wait for 30-60 seconds for full reboot. You might have to tweak the TimeoutStartSec, to see whether tailscale boots fast or not. Tailscale can be slow to boot. So 60 seconds is safe.
 
@@ -162,7 +184,7 @@ A self-healing crontab is very useful, this gives an extra layer of protection. 
 
 To mitigate this we can create a crontab that runs every 5 minutes, regardless of what is going on, and heals the firewall when it detects it was flushed.
 
-Run this first:
+🐤 Run this canary rule first:
 
 ```
 sudo iptables -I INPUT 2 -s 203.0.113.99 -m comment --comment "CANARY-ADMIN" -j DROP
@@ -186,6 +208,9 @@ Paste:
 ```
 #!/bin/bash
 # Check if the dummy rule exists
+
+touch /var/log/iptables-check.log
+chmod 600 /var/log/iptables-check.log
 
 LOG=/var/log/iptables-check.log
 # Logs errors to your email
@@ -232,6 +257,42 @@ Then add:
 `*/5 * * * * /usr/local/sbin/check-iptables.sh`
 
 ---
+
+### Quick Verification
+
+After setup, verify each layer:
+
+### Check saved rules exist
+`ls -lh /etc/iptables/rules.v4`
+
+### Check systemd service
+`sudo systemctl status iptables-restore-onboot.service`
+
+### Check cron is scheduled
+`sudo crontab -l | grep check-iptables`
+
+### Force a test restore
+`sudo /usr/local/sbin/check-iptables.sh`
+
+Test it on boot:
+
+```
+sudo reboot
+```
+
+Rebooting may take some time, please be patient.
+
+Then check:
+
+```
+iptables -L -n -v --line-numbers
+```
+
+Run this a few times after one another, to see `systemd` or `cron` effect.
+
+---
+
+End.
 
 Additional useful IP reassignment script:
 
