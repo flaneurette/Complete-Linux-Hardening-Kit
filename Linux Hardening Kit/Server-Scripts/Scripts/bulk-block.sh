@@ -34,6 +34,10 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+# Backup iptables
+sudo iptables-save > /etc/iptables/rules.v4.bak.bulkipblocker
+# if fault: iptables-restore < /etc/iptables/rules.v4.bak.bulkipblocker
+
 # --- Create chain if it doesn't exist ---
 if ! iptables -L $CHAIN -n >/dev/null 2>&1; then
     echo "Creating chain $CHAIN..."

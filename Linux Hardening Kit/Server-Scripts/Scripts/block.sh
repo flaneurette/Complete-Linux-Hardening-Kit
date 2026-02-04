@@ -12,6 +12,10 @@ if [[ -z "$BLOCK_IP" ]]; then
     exit 1
 fi
 
+# Backup iptables
+sudo iptables-save > /etc/iptables/rules.v4.bak.ipblocker
+# if fault: iptables-restore < /etc/iptables/rules.v4.bak.ipblocker
+
 # Check if chain exists
 if ! iptables -L "$CHAIN" -n >/dev/null 2>&1; then
     echo "Creating chain: $CHAIN"
@@ -29,7 +33,7 @@ else
 fi
 
 # Check if IP is already blocked
-if iptables -C "$CHAIN" -s "$BLOCK_IP" -j DROP >/dev/null 2>&1; then
+if iptables -S "$CHAIN" | grep -q -- "-s $BLOCK_IP "; then
     echo "IP $BLOCK_IP is already blocked"
 else
     echo "Blocking $BLOCK_IP"
