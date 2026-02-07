@@ -46,7 +46,7 @@ A lot of things can and will go wrong. So we designed the following `firewall in
 
 ```
 
-sudo apt install mailutils
+sudo apt install mailutils fail2ban
 
 # Disable nftables
 sudo systemctl stop nftables
@@ -215,21 +215,20 @@ Paste:
 #!/bin/bash
 # Check if the dummy rule exists + check if systemd service is running.
 
-LOG=/var/log/iptables-check.log
+LOG="/var/log/iptables-check.log"
+EMAIL="info@example.com"
+FROM="root@example.com"
+SERVICE="iptables-restore-onboot.service"
+CANARY_IP="203.0.113.99"
+CANARY_COMMENT="CANARY-ADMIN"
+
 touch "$LOG"
 chmod 600 "$LOG"
-
-# Logs errors to your email
-EMAIL="hello@example.com"
-FROM="hello@example.com"  # Use a valid sender address
-
-# Check systemd service. 
-SERVICE="iptables-restore-onboot.service"
 
 restore_needed=0
 
 # Check for top canary (catches early flush)
-if ! iptables -C INPUT -s 203.0.113.99 -m comment --comment "CANARY-ADMIN" -j DROP &>/dev/null; then
+if ! iptables -C INPUT -s "$CANARY_IP" -m comment --comment "$CANARY_COMMENT" -j DROP &>/dev/null; then
     echo "$(date): IPv4 top canary missing" >> "$LOG"
     restore_needed=1
 fi
@@ -245,7 +244,7 @@ if [ $restore_needed -eq 1 ]; then
 	# Check if fail2ban is running and restart it to recreate its chains
 	if systemctl is-active --quiet fail2ban; then
 	   systemctl restart fail2ban
-	   if ! iptables -C INPUT -s 203.0.113.99 -m comment --comment "CANARY-ADMIN" -j DROP &>/dev/null; then
+	   if ! iptables -C INPUT -s "$CANARY_IP" -m comment --comment "$CANARY_COMMENT" -j DROP &>/dev/null; then
 		   echo "$(date): Fail2ban flushed the iptables?!" >> "$LOG"
 		   mail -s "Fail2ban flushed the iptables?!" -r "$FROM" "$EMAIL"
 	   fi
@@ -254,17 +253,17 @@ fi
 
 # Check if the service is enabled on boot
 if systemctl is-enabled --quiet "$SERVICE"; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $SERVICE is enabled" >> "$LOG"
+    echo "$(date) - $SERVICE is enabled" >> "$LOG"
 else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $SERVICE is NOT enabled, enabling" >> "$LOG"
+    echo "$(date) - $SERVICE is NOT enabled, enabling" >> "$LOG"
     systemctl enable "$SERVICE"
 fi
 
 # Check if the service is running
 if systemctl is-active --quiet "$SERVICE"; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $SERVICE is running" >> "$LOG"
+    echo "$(date) - $SERVICE is running" >> "$LOG"
 else
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $SERVICE is NOT running, starting it." >> "$LOG"
+    echo "$(date) - $SERVICE is NOT running, starting it." >> "$LOG"
     systemctl start "$SERVICE"
 fi
 
