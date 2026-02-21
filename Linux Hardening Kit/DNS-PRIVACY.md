@@ -84,11 +84,11 @@ Add INPUT rules for both UDP and TCP on port 53:
 
 ```
 # UDP first:
-sudo iptables -I INPUT -p udp --dport 53 -j ACCEPT
+sudo iptables -I INPUT -i lo -p udp --dport 53 -j ACCEPT
 sudo iptables -I OUTPUT -p udp --dport 53 -j ACCEPT
 
 # Optional TCP:
-sudo iptables -I INPUT -p tcp --dport 53 -j ACCEPT
+sudo iptables -I INPUT -i lo -p tcp --dport 53 -j ACCEPT
 sudo iptables -I OUTPUT -p tcp --dport 53 -j ACCEPT
 ```
 
