@@ -6,6 +6,8 @@ Running your own recursive resolver also means DNS queries are no longer logged 
 or cut off access to certain zones like Spamhaus did with public resolvers. Cache poisoning risk is lower with a modern recursive resolver running DNSSEC validation, which unbound does by default. 
 Public resolvers also do this but you are trusting them to do it correctly. No dependency on a third party whose interests may not align with yours and who can be a single point of failure or surveillance. 
 For a mail server handling real traffic that is a good improvement.
+
+More private, more resilient, slightly more responsibility on your end to keep it maintained.
   
 ---
 
