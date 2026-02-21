@@ -2,7 +2,10 @@
 
 For good DNS privacy, use `Unbound`
 
-Running your own recursive resolver also means DNS queries are no longer logged by Cloudflare or Google.
+Running your own recursive resolver also means DNS queries are no longer logged by Cloudflare or Google.  You own the full resolution chain. No third party can silently return wrong answers, inject responses, 
+or cut off access to certain zones like Spamhaus did with public resolvers. Cache poisoning risk is lower with a modern recursive resolver running DNSSEC validation, which unbound does by default. 
+Public resolvers also do this but you are trusting them to do it correctly. No dependency on a third party whose interests may not align with yours and who can be a single point of failure or surveillance. 
+For a mail server handling real traffic that is a good improvement.
   
 ---
 
