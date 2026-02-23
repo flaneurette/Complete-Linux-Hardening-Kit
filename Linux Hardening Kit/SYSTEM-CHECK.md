@@ -4,7 +4,8 @@
 Have at least these installed for much more security:
 
 ```
-sudo apt install -y unattended-upgrades needrestart debsums aide auditd lynis rkhunter fail2ban apparmor ssh-audit apt-listchanges libpam-tmpdir
+sudo apt install -y unattended-upgrades needrestart debsums aide 
+sudo apt install -y auditd lynis rkhunter fail2ban apparmor ssh-audit apt-listchanges libpam-tmpdir
 ```
 
 Every once in a while review manually installed packages:
