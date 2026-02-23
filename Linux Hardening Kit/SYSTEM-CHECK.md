@@ -21,7 +21,9 @@ sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bp
 
 Then if Ubuntu:
 
-`apt remove ubuntu-kernel-accessories`
+```
+apt remove ubuntu-kernel-accessories
+```
 
 The above prevent an upgrade to automatically install `bpfcc-tools`  again.
 
@@ -34,7 +36,7 @@ apt autoremove
 Then run Lynis to get a fresh score:
 
 ```
-lynis audit system
+sudo lynis audit system
 ```
 
 Tools that are frequently abused in post-exploitation:
