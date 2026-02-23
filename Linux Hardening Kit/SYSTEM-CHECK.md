@@ -23,7 +23,7 @@ If so, change it asap:
 chown -R www-data:www-data /var/www
 ```
 
-### Risky packages
+### Must-have packages
 
 Have at least these installed for much more security:
 
@@ -37,6 +37,8 @@ Every once in a while review manually installed packages:
 ```
 aptitude search '~i!~M' | grep -v "^i A"
 ```
+
+### Risky packages
 
 Clean the VPS from many `default packages` that are risky, to lessen attack landscape:
 
