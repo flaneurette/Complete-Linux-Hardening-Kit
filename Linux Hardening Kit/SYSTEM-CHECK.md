@@ -1,6 +1,23 @@
 
 ###  VPS Security
 
+Detect permissions first:
+
+```
+# World-writable files across server:
+find /var/www -perm -o+w 2>/dev/null -ls
+
+# SUID files across server:
+find /var/www -perm /4000 2>/dev/null -ls
+
+# Root owned files in web director(ies) across server:
+find /var/www -user root 2>/dev/null -ls
+
+# If so, change it asap:
+chown -R www-data:www-data /var/www
+```
+
+
 Have at least these installed for much more security:
 
 ```
