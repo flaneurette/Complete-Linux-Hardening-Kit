@@ -4,7 +4,7 @@
 Have at least these installed for much more security:
 
 ```
-sudo apt install -y unattended-upgrades needrestart debsums aide auditd lynis fail2ban apparmor ssh-audit
+sudo apt install -y unattended-upgrades needrestart debsums aide auditd lynis rkhunter fail2ban apparmor ssh-audit
 ```
 
 Every once in a while review manually installed packages:
@@ -52,6 +52,53 @@ install rds /bin/true
 install sctp /bin/true
 install tipc /bin/true
 EOF
+```
+
+### SSH & Issue
+
+```
+cat > /etc/issue << 'EOF'
+Unauthorized access to this system is prohibited.
+All activity is monitored and logged.
+Disconnect immediately if you are not an authorized user.
+EOF
+```
+
+Then:
+
+```
+cp /etc/issue /etc/issue.net
+```
+
+Then:
+
+```
+cat > /etc/ssh/sshd_config.d/99-hardening.conf << 'EOF'
+X11Forwarding no
+AllowTcpForwarding no
+AllowAgentForwarding no
+MaxAuthTries 3
+MaxSessions 2
+ClientAliveCountMax 2
+TCPKeepAlive no
+LogLevel VERBOSE
+EOF
+```
+
+Then:
+
+```
+echo "Banner /etc/issue.net" >> /etc/ssh/sshd_config.d/99-hardening.conf
+sshd -t && systemctl restart ssh
+```
+
+### Motd
+
+```
+chmod -x /etc/update-motd.d/00-header
+chmod -x /etc/update-motd.d/10-help-text
+chmod -x /etc/update-motd.d/50-motd-news
+chmod -x /etc/update-motd.d/50-landscape-sysinfo
 ```
 
 Then run Lynis to get a fresh score:
