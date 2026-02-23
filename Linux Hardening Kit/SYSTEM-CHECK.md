@@ -62,6 +62,33 @@ Then:
 apt autoremove
 ```
 
+### BPF
+
+Be certain to remove it:
+
+```
+apt remove bpfcc-tools bpftrace
+apt-mark hold bpfcc-tools bpftrace
+apt remove ubuntu-kernel-accessories
+apt remove ubuntu-standard
+apt autoremove
+```
+
+Then:
+
+```
+# Check current value (Best to have: 2, worst: 0.)
+sysctl kernel.unprivileged_bpf_disabled
+
+# Verify it's persistent
+grep unprivileged_bpf /etc/sysctl.conf /etc/sysctl.d/*.conf 2>/dev/null
+
+# If not found, add it
+echo "kernel.unprivileged_bpf_disabled = 2" >> /etc/sysctl.conf
+sysctl -p
+```
+
+
 ### Disable core dumps
 
 ```
