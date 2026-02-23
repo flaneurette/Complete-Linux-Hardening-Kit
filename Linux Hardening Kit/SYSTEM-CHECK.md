@@ -35,6 +35,25 @@ Then:
 apt autoremove
 ```
 
+### Disable core dumps
+
+```
+echo "* hard core 0" >> /etc/security/limits.conf
+echo "fs.suid_dumpable = 0" >> /etc/sysctl.conf
+sysctl -p
+```
+
+### Disable unused kernel protocols
+
+```
+cat >> /etc/modprobe.d/disable-unused-protocols.conf << 'EOF'
+install dccp /bin/true
+install rds /bin/true
+install sctp /bin/true
+install tipc /bin/true
+EOF
+```
+
 Then run Lynis to get a fresh score:
 
 ```
