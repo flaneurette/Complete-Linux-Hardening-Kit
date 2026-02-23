@@ -88,6 +88,10 @@ echo "kernel.unprivileged_bpf_disabled = 2" >> /etc/sysctl.conf
 sysctl -p
 ```
 
+If sysctl -p fails, set it to: 1 instead of 2.
+
+> NOTE: The irony is that if it fails, often on a VPS, the admin has no way to disable it permanently and survive reboots. Happens on VPS hypervisor.
+
 
 ### Disable core dumps
 
