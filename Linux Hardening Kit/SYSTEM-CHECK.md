@@ -13,7 +13,7 @@ Every once in a while review manually installed packages:
 aptitude search '~i!~M' | grep -v "^i A"
 ```
 
-Then clean the VPS to lessen attack landscape:
+Clean the VPS from many `default packages` that are risky, to lessen attack landscape:
 
 ```
 sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bpftrace strace trace-cmd apport 
