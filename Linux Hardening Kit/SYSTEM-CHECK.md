@@ -15,7 +15,9 @@ aptitude search '~i!~M' | grep -v "^i A"
 
 Then clean the VPS to lessen attack landscape:
 
-`sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bpftrace strace trace-cmd apport snapd modemmanager tnftp procmail rmail ruby-net-telnet arp-scan xclip sosreport`
+```
+sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bpftrace strace trace-cmd apport snapd modemmanager tnftp procmail rmail ruby-net-telnet arp-scan xclip sosreport
+```
 
 Then if Ubuntu:
 
