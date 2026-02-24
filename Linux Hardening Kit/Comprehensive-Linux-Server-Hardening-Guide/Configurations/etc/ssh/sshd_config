@@ -4,7 +4,7 @@
 Port 22                      # Change if you want non-standard port
 AddressFamily any
 ListenAddress 0.0.0.0
-ListenAddress ::
+# ListenAddress ::			 # Only if you support IPv6! 
 
 Protocol 2                   # Only SSH protocol 2
 
@@ -14,6 +14,9 @@ PasswordAuthentication no     # Key-based auth only
 ChallengeResponseAuthentication no
 UsePAM yes                    # Needed for sudo and user auth
 PubkeyAuthentication yes
+
+# Set explicit host key algorithms
+HostKeyAlgorithms ssh-ed25519,rsa-sha2-512,rsa-sha2-256
 
 # Key files
 HostKey /etc/ssh/ssh_host_ed25519_key
@@ -31,7 +34,7 @@ MaxSessions 2
 PermitEmptyPasswords no
 
 # Access control
-AllowUsers youruser          # Replace with your allowed SSH usernames
+# AllowUsers youruser        # Replace with your allowed SSH usernames
 # AllowGroups sshusers       # Alternatively, use a group
 
 # Connection options
@@ -39,11 +42,30 @@ ClientAliveInterval 60
 ClientAliveCountMax 3
 X11Forwarding no
 PrintMotd no
-TCPKeepAlive yes
+
+TCPKeepAlive no
 
 # Logging
 SyslogFacility AUTH
 LogLevel VERBOSE
+
+# Disable unused authentication methods
+KerberosAuthentication no
+GSSAPIAuthentication no
+
+# Prevent users from setting environment variables via SSH
+PermitUserEnvironment no
+
+# Disable port forwarding (already have TCP, add these)
+AllowStreamLocalForwarding no
+GatewayPorts no
+
+# Restrict sftp if you do not need it
+# Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Ignore user known hosts and rhosts (extra hardening)
+IgnoreRhosts yes
+IgnoreUserKnownHosts yes
 
 # Misc
 Banner /etc/issue.net           # Optional: legal warning message
