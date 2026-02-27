@@ -43,7 +43,7 @@ aptitude search '~i!~M' | grep -v "^i A"
 Clean the VPS from many `default packages` that are risky, to lessen attack landscape:
 
 ```
-sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bpftrace strace trace-cmd apport 
+sudo apt remove eatmydata telnet inetutils-telnet swaks webalizer bpfcc-tools bpftrace bpfmon strace trace-cmd apport 
 sudo apt remove snapd modemmanager tnftp procmail rmail ruby-net-telnet arp-scan xclip sosreport 
 sudo apt remove lxd-agent-loader lxd-installer multipath-tools
 ```
@@ -67,11 +67,12 @@ apt autoremove
 Be certain to remove it:
 
 ```
-apt remove bpfcc-tools bpftrace
-apt-mark hold bpfcc-tools bpftrace
+apt remove bpfcc-tools bpftrace bpfmon bpfcc-lua
+apt-mark hold bpfcc-tools bpftrace bpfmon
 apt remove ubuntu-kernel-accessories
 apt remove ubuntu-standard
 apt autoremove
+
 ```
 
 Then:
