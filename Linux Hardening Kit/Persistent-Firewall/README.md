@@ -49,7 +49,6 @@ A lot of things can and will go wrong. So we designed the following `firewall in
 ### Proceed with implementation
 
 ```
-
 sudo apt install mailutils fail2ban
 
 # Disable nftables
@@ -73,6 +72,11 @@ iptables --version
 sudo systemctl disable netfilter-persistent
 sudo systemctl mask netfilter-persistent
 sudo apt remove netfilter-persistent iptables-persistent
+
+# Be sure to remove these too:
+sudo apt remove ubuntu-standard bpfcc-tools bpftrace bpfmon bpfcc-lua
+sudo apt remove ubuntu-kernel-accessories
+apt autoremove
 ```
 
 Then quickly:
@@ -87,8 +91,29 @@ apt purge nftables
 
 To prevent Ubuntu from pulling it in again. (happened to me, and nftables flushed iptables yet again.)
 
+### Edit fail2ban
 
-And start using regular `iptables` again.
+Fail2ban uses nftables by default. We don't want that anymore.
+
+```
+nano /etc/fail2ban/jail.local
+```
+
+Add below `[DEFAULT]`
+
+```
+[DEFAULT]
+banaction = iptables-multiport
+banaction_allports = iptables-allports
+```
+
+Then:
+
+```
+systemctl restart fail2ban
+```
+
+Now start using regular `iptables` again.
 
 Create:
 
