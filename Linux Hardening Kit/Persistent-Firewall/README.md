@@ -5,12 +5,9 @@ In this document we are going to build a triple-layered defense:
 - a persistent firewall(initial boot)
 - a systemd service (post-service restore)
 - a cron canary (continuous monitoring every 5 min)
+- ipset support
 
 In this way, we do not have to rely on packages such as `UFW`, `netfilter-persistent` nor `nftables`. Our method is rather safe, because there are few surprises (no mysterious flushing of tables). Even if you are locked out, a `crontab` will restore the tables properly.
-
-> NOTE: if you use `ipset`, then things will be more complicated as you need to restore each `ipset` on boot as well, otherwise iptables cannot restore properly.
-
-> NOTE: As of yet, this readme does not support `ipset`. I need to update it soon to include it.
 
 ### Why?
 
@@ -103,8 +100,9 @@ Add below `[DEFAULT]`
 
 ```
 [DEFAULT]
-banaction = iptables-multiport
-banaction_allports = iptables-allports
+# start using ipset also, which is much better.
+banaction = iptables-ipset[type=multiport]
+banaction_allports = iptables-ipset[type=allports]
 ```
 
 Then:
@@ -112,6 +110,19 @@ Then:
 ```
 systemctl restart fail2ban
 ```
+
+IMPORTANT: If you have a custom `ipset` tables, you need to be very careful. You must add this at the top of in any script that restores iptables rules. 
+If an ipset does not exist, and iptables loads it, iptables might fail or flush. Hence, we check:
+
+```
+ipset create YOUR_IP_SET_TABLE hash:ip -exist
+# OR:
+ipset create YOUR_IP_SET_TABLE hash:net -exist
+```
+
+To find your custom ipsets: `ipset list -t`
+
+### Custom firewall script
 
 Now start using regular `iptables` again.
 
@@ -124,6 +135,14 @@ Paste:
 ```
 #!/bin/bash
 set -e
+
+# Check ipset table. Only uncomment if you use custom ipsets.
+# ipset create YOUR_IP_SET_TABLE hash:ip -exist 2>/dev/null || true
+# OR:
+# ipset create YOUR_IP_SET_TABLE hash:net -exist 2>/dev/null || true
+
+# Only uncomment if you use custom ipsets or use fail2ban:
+# ipset save > /etc/iptables/ipsets.conf
 
 iptables-save > /etc/iptables/rules.v4.bak.firewall
 ip6tables-save > /etc/iptables/rules.v6.bak.firewall
@@ -151,13 +170,6 @@ Whenever you change your iptables rules, save them:
 
 `sudo firewall`
 
-or:
-
-```bash
-sudo iptables-save > /etc/iptables/rules.v4
-sudo ip6tables-save > /etc/iptables/rules.v6
-```
-
 This writes your current rules to `/etc/iptables/rules.v4` and `/etc/iptables/rules.v6`.
 
 ## The restore script
@@ -175,6 +187,11 @@ ALERT_EMAIL="your@email.com"
 HOSTNAME=$(hostname)
 ERRORS=""
 
+# Do you use ipsets or fail2ban? 1 for true, 0 for false.
+# You MUST be certain ipsets exists. Otherwise: failure.
+
+IPSET_USE=0
+
 # Wait for tailscaled to start, timeout after 75 seconds
 for i in $(seq 1 15); do
     if systemctl is-active --quiet tailscaled; then
@@ -184,16 +201,17 @@ for i in $(seq 1 15); do
     sleep 5
 done
 
-# IF you have `ipsets`, uncomment this block:
-# Restore ipsets first - iptables rules may depend on these sets existing
-# if [ -f /etc/iptables/ipsets.conf ]; then
-#    ipset restore < /etc/iptables/ipsets.conf 2>&1
-#    if [ $? -ne 0 ]; then
-#        ERRORS="${ERRORS}\n[FAILED] ipset restore from /etc/iptables/ipsets.conf"
-#    fi
-#else
-#    ERRORS="${ERRORS}\n[WARNING] /etc/iptables/ipsets.conf not found - ipsets not restored"
-#fi
+if [ "$IPSET_USE" == 1 ]; then
+    # Restore ipsets first - iptables rules may depend on these sets existing
+    if [ -f /etc/iptables/ipsets.conf ]; then
+        ipset restore -exist < /etc/iptables/ipsets.conf 2>&1
+        if [ $? -ne 0 ]; then
+            ERRORS="${ERRORS}\n[FAILED] ipset restore from /etc/iptables/ipsets.conf"
+        fi
+    else
+        ERRORS="${ERRORS}\n[WARNING] /etc/iptables/ipsets.conf not found - ipsets not restored"
+    fi
+fi
 
 # Restore iptables rules
 iptables-restore < /etc/iptables/rules.v4 2>&1
@@ -220,6 +238,11 @@ if systemctl is-active --quiet fail2ban; then
         echo -e "Subject: [ALERT] ${HOSTNAME} - fail2ban restart failed after iptables restore\n\nfail2ban failed to restart on ${HOSTNAME} after iptables restore." \
             | sendmail "$ALERT_EMAIL"
     fi
+fi
+
+# Post-fail2ban ipset saving.
+if [ "$IPSET_USE" == 1 ]; then
+    ipset save > /etc/iptables/ipsets.conf
 fi
 ```
 
@@ -298,6 +321,11 @@ SERVICE="iptables-restore-onboot.service"
 CANARY_IP="203.0.113.99"
 CANARY_COMMENT="CANARY-ADMIN"
 
+# Do you use ipsets or fail2ban? 1 for true, 0 for false.
+# You MUST be certain ipsets exists. Otherwise: failure.
+
+IPSET_USE=0
+
 touch "$LOG"
 chmod 600 "$LOG"
 
@@ -311,20 +339,30 @@ fi
 
 if [ $restore_needed -eq 1 ]; then
     echo "$(date): Canary missing - restoring iptables..." >> "$LOG"
+   
+    if [ "$IPSET_USE" == 1 ]; then
+        ipset restore < /etc/iptables/ipsets.conf 2>&1
+    fi
     
     [ -f /etc/iptables/rules.v4 ] && iptables-restore < /etc/iptables/rules.v4
     [ -f /etc/iptables/rules.v6 ] && ip6tables-restore < /etc/iptables/rules.v6
     
     echo "$(date): Rules restored successfully" >> "$LOG"
-	
-	# Check if fail2ban is running and restart it to recreate its chains
-	if systemctl is-active --quiet fail2ban; then
-	   systemctl restart fail2ban
-	   if ! iptables -C INPUT -s "$CANARY_IP" -m comment --comment "$CANARY_COMMENT" -j DROP &>/dev/null; then
-		   echo "$(date): Fail2ban flushed the iptables?!" >> "$LOG"
-		   mail -s "Fail2ban flushed the iptables?!" -r "$FROM" "$EMAIL"
-	   fi
-	fi
+    
+    # Check if fail2ban is running and restart it to recreate its chains
+    if systemctl is-active --quiet fail2ban; then
+       systemctl restart fail2ban
+       if ! iptables -C INPUT -s "$CANARY_IP" -m comment --comment "$CANARY_COMMENT" -j DROP &>/dev/null; then
+           echo "$(date): Fail2ban flushed the iptables?!" >> "$LOG"
+           mail -s "Fail2ban flushed the iptables?!" -r "$FROM" "$EMAIL"
+       fi
+    fi
+    
+    # Post-fail2ban ipset saving.
+    if [ "$IPSET_USE" == 1 ]; then
+        ipset save > /etc/iptables/ipsets.conf
+    fi
+    
 fi
 
 # Check if the service is enabled on boot
@@ -333,7 +371,7 @@ if systemctl is-enabled --quiet "$SERVICE"; then
 else
     echo "$(date) - $SERVICE is NOT enabled, enabling" >> "$LOG"
     systemctl enable "$SERVICE"
-fi
+fi  
 
 # Check if the service is running
 if systemctl is-active --quiet "$SERVICE"; then

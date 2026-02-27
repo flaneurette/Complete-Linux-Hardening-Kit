@@ -85,7 +85,9 @@ logpath = /var/www/tmp/honeypot-UNIQUE_KEY/UNIQUE_KEY-honeypot.log
 maxretry = 1
 findtime = 86400
 bantime = 86400
-action = iptables-multiport[name=honeypot, port="http,https", protocol=tcp]
+# action = iptables-multiport[name=honeypot, port="http,https", protocol=tcp]
+# Use ipset for large honeypot:
+action = iptables-ipset[name=honeypot, type=multiport, port="http,https", protocol=tcp]
 ignoreip = 127.0.0.1/8 ::1 YOUR.IP.HERE
 logtarget = /var/log/fail2ban-honeypot.log
 ```
