@@ -165,6 +165,11 @@ grep --color=auto -r "1\.1\.1\.1\|8\.8\.8\.8\|1\.0\.0\.1\|8\.8\.4\.4" /etc
 grep -r "2606:4700\|2001:4860" /etc/
 ```
 
+Then:
+
+```
+sudo systemctl disable --now systemd-resolved
+```
 
 ---
 
