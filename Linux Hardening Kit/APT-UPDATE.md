@@ -18,4 +18,4 @@ sudo nano /etc/apt/sources.list.d/ubuntu.sources
 
 And replace all `http` with `https`
 
-Done.
+Done. 
