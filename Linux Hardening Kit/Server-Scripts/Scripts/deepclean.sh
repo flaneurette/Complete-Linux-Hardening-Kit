@@ -5,7 +5,7 @@
 # crontab -e
 # 30 2 * * 5 /bin/bash /home/scripts/deepclean.sh
 
-set -e
+set -euo pipefail
 shopt -s nullglob
 
 # Fail2ban
@@ -14,16 +14,22 @@ shopt -s nullglob
 # sudo fail2ban-client status sshd > /var/log/fail2ban_review_sshd_$(date +%Y%m%d).log
 # sudo fail2ban-client banned >> /var/log/fail2ban_review_banned_$(date +%Y%m%d).log
 
+ARCHIVE=~/logs_backup.tar.gz
+ENCRYPTED=$ARCHIVE.gpg
+
+# Comment these 3 lines with a: #, if you want encrypted backups:
+[ -f "$ARCHIVE" ] && shred -u "$ARCHIVE"
+[ -f "$ENCRYPTED" ] && shred -u "$ENCRYPTED"
+sudo tar -czf $ARCHIVE /var/log --ignore-failed-read --warning=no-file-changed || true
+
 # Encrypted backup
 # -----------------
-# Uncomment if you want to encrypt all log files, and store it as GPG file:
-# === Archive and encrypt logs before clearing ===
-# DATE=$(date +%m)
-# ARCHIVE=~/logs_backup_$DATE.tar.gz
-# ENCRYPTED=$ARCHIVE.gpg
-# sudo tar -czf $ARCHIVE /var/log 2>/dev/null
+# Uncomment all these lines, if you want to encrypt all log files, and store it as GPG file:
+# [ -f "$ARCHIVE" ] && shred -u "$ARCHIVE"
+# [ -f "$ENCRYPTED" ] && shred -u "$ENCRYPTED"
+# sudo tar -czf $ARCHIVE /var/log --ignore-failed-read --warning=no-file-changed || true
 # gpg --recipient yourkey@email.com --encrypt $ARCHIVE
-# shred -u $ARCHIVE
+# [ -f "$ARCHIVE" ] && shred -u "$ARCHIVE"
 # echo "=== Encrypted log archive saved: $ENCRYPTED ==="
 
 echo "=== Disk usage before cleanup ==="
