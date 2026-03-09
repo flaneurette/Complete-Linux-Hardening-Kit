@@ -142,7 +142,7 @@ dig +trace example.com
 
 #### Install DNSViz
 ```
-pip install dnsviz
+apt install dnsviz
 ```
 
 #### Probe domain
