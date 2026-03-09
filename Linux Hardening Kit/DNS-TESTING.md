@@ -16,6 +16,12 @@ want to whitelist port 43 for whois:
 
 > iptables -A OUTPUT -p tcp --dport 43 -j ACCEPT
 
+Somewhat safer:
+
+```
+whois -h whois.verisign-grs.com domain.com
+```
+
 ### DNSSEC
 
 #### Basic DNSSEC check
