@@ -154,11 +154,6 @@ dig +trace example.com
 
 ### Advanced DNSSEC analysis
 
-#### Install DNSViz
-```
-apt install dnsviz
-```
-
 #### Probe domain
 ```
 dnsviz probe example.com
