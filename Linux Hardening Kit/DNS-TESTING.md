@@ -2,7 +2,7 @@
 
 #### Install tools
 ```
-sudo apt install dnsutils ldnsutils torsocks
+sudo apt install dnsutils ldnsutils dnsviz torsocks
 ```
 
 #### Whois
