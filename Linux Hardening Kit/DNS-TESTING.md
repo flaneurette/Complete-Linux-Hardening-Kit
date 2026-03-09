@@ -19,7 +19,7 @@ want to whitelist port 43 for whois:
 Somewhat safer:
 
 ```
-whois -h whois.verisign-grs.com domain.com
+whois -h whois.verisign-grs.com example.com
 ```
 
 ### DNSSEC
