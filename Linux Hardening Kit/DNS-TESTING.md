@@ -11,6 +11,10 @@ sudo apt install dnsutils ldnsutils
 whois example.com
 ```
 
+> NOTE: if you restrict OUTPUT in iptables (very good choice) you might,
+want to whitelist port 43 for whois:
+iptables -A OUTPUT -p tcp --dport 43 -j ACCEPT
+
 ### DNSSEC
 
 #### Basic DNSSEC check
