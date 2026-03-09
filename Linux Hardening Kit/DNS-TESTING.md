@@ -24,7 +24,9 @@ whois -h whois.verisign-grs.com example.com
 
 Better:
 ```
+sudo systemctl start tor
 torsocks whois example.com
+sudo systemctl stop tor
 ```
 
 ### DNSSEC
