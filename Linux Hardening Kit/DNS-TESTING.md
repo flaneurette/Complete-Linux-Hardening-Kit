@@ -25,12 +25,10 @@ flags: qr rd ra ad
 
 `ad` = DNSSEC validated.
 
-
 #### Full DNSSEC records
 ```
 dig +dnssec +multi example.com
 ```
-
 
 #### DNSSEC validation
 ```
@@ -56,7 +54,6 @@ SERVFAIL
 ```
 dig +trace +dnssec example.com
 ```
-
 
 #### DNSSEC verification
 ```
