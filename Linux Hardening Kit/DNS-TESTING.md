@@ -25,7 +25,6 @@ whois -h whois.verisign-grs.com example.com
 Better:
 ```
 torsocks whois example.com
-torsocks whois -h whois.iana.org evil.com
 ```
 
 ### DNSSEC
