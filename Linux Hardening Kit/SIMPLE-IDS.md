@@ -21,7 +21,7 @@ SCRIPT_TO_RUN="/usr/local/sbin/auth_monitor.sh"
  
 inotifywait -m -e modify "$WATCH_FILE" |
 while read -r directory event filename; do
-    echo "[$(date)] auth.log changed — running monitor"
+    echo "[$(date)] auth.log changed - running monitor"
     bash "$SCRIPT_TO_RUN"
 done
 ```
@@ -58,7 +58,7 @@ nano /usr/local/sbin/auth_monitor.sh
 Best to use a `e-mailaccount` not served on the same server, as it could be wiped!
 Best practise: send an e-mail to another server/mailaccount.
 
-Paste and edit email/ip:
+Paste and edit email/ip: 
 
 ```
 #!/bin/bash
