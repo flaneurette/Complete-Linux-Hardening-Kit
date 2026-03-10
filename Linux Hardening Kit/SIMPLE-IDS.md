@@ -41,7 +41,7 @@ Description=Auth Log Watcher
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/auth_watcher.sh
+ExecStart=/usr/local/sbin/auth_watcher.sh
 Restart=always
 RestartSec=5
 
