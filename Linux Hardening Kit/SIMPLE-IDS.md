@@ -99,7 +99,7 @@ touch "$DDOS_LOG"
 
 # We wont clean logs, because an attacker might use a DDoS to mask an attack
 # Instead, notify admin.
-# Log size can be max 10MB. Adjust if needed.
+# Log size can be max 50MB. Adjust if needed.
 # This also prevents the bash loop from getting stuck.
 
 # If DDOS flag is already set, skip
@@ -110,8 +110,8 @@ fi
 
 size=$(stat -c%s "$AUTH_LOG")
 
-if [ "$size" -gt $((10 * 1024 * 1024)) ]; then
-    echo "$AUTH_LOG exceeded 10MB ($(numfmt --to=iec "$size")). Possible DDoS. Do not forget to empty $DDOS_LOG after investigation, to reset DDoS monitoring!" | \
+if [ "$size" -gt $((50 * 1024 * 1024)) ]; then
+    echo "$AUTH_LOG exceeded 50MB ($(numfmt --to=iec "$size")). Possible DDoS. Do not forget to empty $DDOS_LOG after investigation, to reset DDoS monitoring!" | \
         mail -s "Auth log size warning" -a "From: $EMAIL_FROM" "$EMAIL_TO"
     echo "1" > "$DDOS_LOG"
     exit 0
