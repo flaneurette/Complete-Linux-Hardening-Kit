@@ -87,17 +87,41 @@ WHITELIST_IP_3="203.0.113.42"
 
 AUTH_LOG="/var/log/auth.log"
 SEEN_IPS_FILE="/var/lib/auth_monitor/seen_ips.txt"
+DDOS_LOG="/var/lib/auth_monitor/ddos_log.txt"
 
-# ----------- INIT -----------
+# ----------- INIT -----------------------------------------------------
 
 mkdir -p /var/lib/auth_monitor
 touch "$SEEN_IPS_FILE"
+touch "$DDOS_LOG"
 
-# ----------- EXTRACT ALL IPs FROM LOG -----------
+# ----------- DDOS PROTECTION ------------------------------------------
+
+# We wont clean logs, because an attacker might use a DDoS to mask an attack
+# Instead, notify admin.
+# Log size can be max 10MB. Adjust if needed.
+# This also prevents the bash loop from getting stuck.
+
+# If DDOS flag is already set, skip
+if grep -qx '1' "$DDOS_LOG" 2>/dev/null; then
+    echo "Clear the $DDOS_LOG log!"
+    exit 0
+fi
+
+size=$(stat -c%s "$AUTH_LOG")
+
+if [ "$size" -gt $((10 * 1024 * 1024)) ]; then
+    echo "$AUTH_LOG exceeded 10MB ($(numfmt --to=iec "$size")). Possible DDoS. Do not forget to empty $DDOS_LOG after investigation, to reset DDoS monitoring!" | \
+        mail -s "Auth log size warning" -a "From: $EMAIL_FROM" "$EMAIL_TO"
+    echo "1" > "$DDOS_LOG"
+    exit 0
+fi
+
+# ----------- EXTRACT ALL IPs FROM LOG ---------------------------------
 
 ALL_IPS=$(grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' "$AUTH_LOG" | sort -u)
 
-# ----------- LOOP OVER IPs -----------
+# ----------- LOOP OVER IPs --------------------------------------------
 
 for IP in $ALL_IPS; do
 
