@@ -18,7 +18,7 @@ Paste:
 
 WATCH_FILE="/var/log/auth.log"
 SCRIPT_TO_RUN="/usr/local/sbin/auth_monitor.sh"
-
+ 
 inotifywait -m -e modify "$WATCH_FILE" |
 while read -r directory event filename; do
     echo "[$(date)] auth.log changed — running monitor"
