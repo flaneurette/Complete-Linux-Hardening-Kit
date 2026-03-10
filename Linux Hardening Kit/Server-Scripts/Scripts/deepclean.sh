@@ -61,6 +61,8 @@ echo "=== Deep clean... ==="
 # Shred sensitive files.
 shred -u /var/log/auth.log
 touch /var/log/auth.log
+sudo chmod 660 /var/log/auth.log
+sudo chown root:syslog /var/log/auth.log
 
 sudo truncate -s 0 /var/log/syslog
 sudo truncate -s 0 /var/log/kern.log
@@ -70,7 +72,7 @@ sudo truncate -s 0 /var/log/apt/history.log
 # sudo truncate -s 0 /var/log/secure         # RHEL/CentOS
 sudo rm -rf /var/cache/logwatch/*
 
-echo "=== Disk usage after cleanup ==="
+echo "=== Disk usage after cleanup =="
 df -h /
 
 RED='\033[0;31m'
