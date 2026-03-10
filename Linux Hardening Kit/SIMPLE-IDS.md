@@ -1,5 +1,10 @@
 # Simple IDS.
 
+Only for IPv4. To do IPv6, modify script.
+
+Personally, I turned off IPv6 on network level, as having two channels
+dramatically increases the attack landscape.
+
 ```
 sudo apt install inotify-tools mailutils
 ```
@@ -120,7 +125,7 @@ fi
 
 # ----------- EXTRACT ALL IPs FROM LOG ---------------------------------
 
-ALL_IPS=$(grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' "$AUTH_LOG" | sort -u)
+ALL_IPS=$(grep -Eo '\b([0-9]{1,3}\.){3}[0-9]{1,3}\b' "$AUTH_LOG" | sort -u | uniq)
 
 # ----------- LOOP OVER IPs --------------------------------------------
 
