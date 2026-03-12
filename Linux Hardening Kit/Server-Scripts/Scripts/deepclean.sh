@@ -64,6 +64,9 @@ touch /var/log/auth.log
 sudo chmod 640 /var/log/auth.log
 sudo chown syslog:adm /var/log/auth.log
 
+# sudo truncate -s 0 /var/log/wtmp
+# sudo truncate -s 0 /var/log/btmp
+
 sudo truncate -s 0 /var/log/syslog
 sudo truncate -s 0 /var/log/kern.log
 sudo truncate -s 0 /var/log/dpkg.log         # Debian/Ubuntu
