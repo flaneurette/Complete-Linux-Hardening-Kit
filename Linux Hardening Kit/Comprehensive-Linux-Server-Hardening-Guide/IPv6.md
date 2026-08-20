@@ -27,8 +27,6 @@ Type=oneshot
 ExecStart=/usr/sbin/sysctl -w net.ipv6.conf.all.disable_ipv6=1
 ExecStart=/usr/sbin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
 ExecStart=/usr/sbin/sysctl -w net.ipv6.conf.lo.disable_ipv6=1
-# This mail fail on some systems, if you get errors, comment this line:
-ExecStart=/usr/sbin/sysctl -w net.ipv6.conf.ens6.disable_ipv6=1
 RemainAfterExit=yes
 
 [Install]
@@ -66,11 +64,11 @@ Save it, then run:
 
 `sudo sysctl --system`
 
-`systemctl apache2 restart`
+`systemctl restart apache2`
 
-`systemctl postfix restart`
+`systemctl restart postfix`
 
-`systemctl dovecot restart`
+`systemctl restart dovecot`
 
 **REBOOT** to see if it survives, it should: `sudo reboot`
 
